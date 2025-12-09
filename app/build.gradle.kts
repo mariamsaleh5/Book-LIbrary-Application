@@ -58,7 +58,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-
+    implementation("androidx.browser:browser:1.6.0")
     implementation("androidx.compose.ui:ui:1.6.4")
     implementation("androidx.compose.ui:ui-tooling-preview:1.6.4")
     implementation("androidx.compose.material3:material3:1.4.0")

@@ -1,5 +1,5 @@
 package com.example.book_library_application
-
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -80,8 +80,9 @@ fun MainScreen(
                                             if (!url.startsWith("http://") && !url.startsWith("https://")) {
                                                 url = "https://$url"
                                             }
-                                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-                                            context.startActivity(intent)
+                                            val builder = CustomTabsIntent.Builder().setShowTitle(true)
+                                            val customTabsIntent = builder.build()
+                                            customTabsIntent.launchUrl(context, Uri.parse(url))
                                         } catch (e: Exception) {
                                             Log.e(
                                                 "MainScreen",
