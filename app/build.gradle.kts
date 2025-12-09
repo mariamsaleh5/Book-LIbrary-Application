@@ -38,6 +38,14 @@ android {
     buildFeatures {
         compose = true
     }
+    
+    configurations.all {
+        resolutionStrategy {
+            force("org.hamcrest:hamcrest-core:2.2")
+            force("org.hamcrest:hamcrest-library:2.2")
+            force("org.hamcrest:hamcrest-integration:2.2")
+        }
+    }
 }
 
 dependencies {
@@ -50,19 +58,13 @@ dependencies {
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.test.manifest)
-    implementation("androidx.compose.material:material-icons-core:1.7.0")
+
     implementation("androidx.compose.ui:ui:1.6.4")
     implementation("androidx.compose.ui:ui-tooling-preview:1.6.4")
     implementation("androidx.compose.material3:material3:1.4.0")
     implementation("androidx.activity:activity-compose:1.9.0")
     implementation("androidx.navigation:navigation-compose:2.8.0")
+    implementation("androidx.compose.material:material-icons-extended:1.6.4")
 
 
     // Room
@@ -76,12 +78,19 @@ dependencies {
     kapt("com.google.dagger:hilt-compiler:2.51.1")
 
     // Testing
-    testImplementation("junit:junit:4.13.2")
+    testImplementation("junit:junit:4.13.2") {
+        exclude(group = "org.hamcrest", module = "hamcrest-core")
+    }
     testImplementation("io.mockk:mockk:1.13.10")
     testImplementation("org.mockito:mockito-core:5.8.0")
     testImplementation("org.mockito.kotlin:mockito-kotlin:5.2.1")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
     testImplementation("androidx.arch.core:core-testing:2.2.0")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    androidTestImplementation("androidx.test:core:1.6.1")
+    androidTestImplementation("androidx.test:runner:1.6.2")
+    androidTestImplementation("androidx.test:rules:1.6.1")
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.androidx.espresso.intents)
+    androidTestImplementation("org.hamcrest:hamcrest:2.2")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.4")
 }

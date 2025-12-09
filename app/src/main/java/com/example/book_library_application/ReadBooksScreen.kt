@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.book_library_application.Book
@@ -47,7 +48,8 @@ fun ReadBooksScreen(
         ) {
             Text(
                 text = "Read Books",
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.testTag("ReadBooksTitle")
             )
             Spacer(modifier = Modifier.height(16.dp))
             if (readBooks.isEmpty()) {
