@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,12 +18,14 @@ import androidx.navigation.compose.rememberNavController
 import com.example.book_library_application.Book
 import com.example.book_library_application.BookViewModel
 import com.example.book_library_application.ui.theme.BookLIbraryApplicationTheme
+import com.example.book_library_application.ui.theme.CardColors
 import android.content.Intent
 import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.clickable
-//import androidx.compose.foundation.layout.RowScope.weight
+import androidx.compose.ui.graphics.Color
+/** import androidx.compose.foundation.layout.RowScope.weight */
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -33,6 +36,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.book_library_application.BookDao
+import androidx.compose.material.icons.filled.Book
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlin.text.startsWith
@@ -46,35 +50,56 @@ fun MainScreen(
     val books by viewModel.allBooks.collectAsStateWithLifecycle(initialValue = emptyList())
     val context = LocalContext.current
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-                .padding(16.dp)
-        ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
             Text(
                 text = "Book Library",
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.displaySmall,
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(bottom = 16.dp)
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            LazyColumn {
+            LazyColumn(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(12.dp),
+                contentPadding = PaddingValues(bottom = 100.dp)
+            ) {
                 items(books) { book ->
+                    val cardColor = CardColors[kotlin.math.abs(book.name.hashCode()) % CardColors.size]
                     Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 4.dp)
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = cardColor
+                        ),
+                        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+                        shape = MaterialTheme.shapes.medium
                     ) {
                         Row(
-                            modifier = Modifier.padding(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            Text(
-                                text = book.name,
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .clickable {
-                                        try {
+                            Row(
+                                modifier = Modifier.weight(1f),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Book,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.primary,
+                                    modifier = Modifier.padding(end = 12.dp)
+                                )
+                                Text(
+                                    text = book.name,
+                                    style = MaterialTheme.typography.titleMedium,
+                                    modifier = Modifier
+                                        .clickable {
+                                            try {
                                             var url = book.goodreadsUrl.trim()
                                             // Add https:// if missing
                                             if (!url.startsWith("http://") && !url.startsWith("https://")) {
@@ -96,24 +121,35 @@ fun MainScreen(
                                             ).show()
                                         }
                                     },
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                            IconButton(onClick = { viewModel.deleteBook(book) }) {
-                                Icon(
-                                    imageVector = Icons.Default.Delete,
-                                    contentDescription = "Delete book",
-                                    tint = MaterialTheme.colorScheme.error
+                                    color = Color.Black.copy(alpha = 0.8f),
+                                    fontWeight = FontWeight.Medium
                                 )
                             }
-                            Checkbox(
-                                checked = book.isRead,
-                                onCheckedChange = { viewModel.toggleRead(book) }
-                            )
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                            ) {
+                                Checkbox(
+                                    checked = book.isRead,
+                                    onCheckedChange = { viewModel.toggleRead(book) },
+                                    colors = CheckboxDefaults.colors(
+                                        checkedColor = MaterialTheme.colorScheme.secondary,
+                                        uncheckedColor = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                )
+                                IconButton(onClick = { viewModel.deleteBook(book) }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Delete,
+                                        contentDescription = "Delete book",
+                                        tint = MaterialTheme.colorScheme.error.copy(alpha = 0.7f)
+                                    )
+                                }
+                            }
                         }
                     }
                 }
             }
-        }
     }
 }
 
