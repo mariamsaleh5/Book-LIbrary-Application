@@ -26,7 +26,6 @@ import com.example.book_library_application.BookDao
 import com.example.book_library_application.BookDatabase
 import kotlinx.coroutines.launch
 
-// Book, BookDao, BookDatabase as provided by user - no changes
 
 class BookRepository(private val bookDao: BookDao) {
     fun getAllBooks(): kotlinx.coroutines.flow.Flow<List<Book>> = bookDao.getAllBooks()
@@ -62,7 +61,7 @@ class BookViewModel(private val repository: BookRepository) : ViewModel() {
     }
 }
 
-// Factory for ViewModel
+
 class BookViewModelFactory(private val repository: BookRepository) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(BookViewModel::class.java)) {
@@ -80,7 +79,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Initialize once in onCreate to avoid recomposition issues
+
         database = BookDatabase.getDatabase(this)
         repository = BookRepository(database.bookDao())
         viewModelFactory = BookViewModelFactory(repository)
@@ -89,7 +88,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             BookLIbraryApplicationTheme {
                 val navController = rememberNavController()
-                // Shared ViewModel for all screens
+
                 val sharedViewModel: BookViewModel by viewModels { viewModelFactory }
 
                 Scaffold(

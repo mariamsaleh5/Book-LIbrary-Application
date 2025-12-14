@@ -13,7 +13,6 @@ import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
-
 @ExperimentalCoroutinesApi
 class BookRepositoryTest {
 
@@ -39,7 +38,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    fun `getAllBooks returns flow of books from dao`() = runTest {
+    fun getAllBooks_returns_flow_of_books_from_dao() = runTest {
 
         val booksList = listOf(testBook)
         whenever(bookDao.getAllBooks()).thenReturn(flowOf(booksList))
@@ -51,7 +50,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    fun `getReadBooks returns flow of read books from dao`() = runTest {
+    fun getReadBooks_returns_flow_of_read_books_from_dao() = runTest {
 
         val readBook = testBook.copy(isRead = true)
         val readBooksList = listOf(readBook)
@@ -63,7 +62,7 @@ class BookRepositoryTest {
     }
 
     @Test
-    fun `addBook calls dao insertBook`() = runTest {
+    fun addBook_calls_dao_insertBook() = runTest {
 
         repository.addBook(testBook)
 
@@ -71,33 +70,31 @@ class BookRepositoryTest {
     }
 
     @Test
-    fun `deleteBook calls dao deleteBook`() = runTest {
+    fun deleteBook_calls_dao_deleteBook() = runTest {
         repository.deleteBook(testBook)
-
 
         verify(bookDao).deleteBook(testBook)
     }
 
     @Test
-    fun `toggleRead toggles book read status and updates in dao`() = runTest {
+    fun toggleRead_toggles_book_read_status_and_updates_in_dao() = runTest {
 
         val book = testBook.copy(isRead = false)
 
         repository.toggleRead(book)
 
-
-        assert(book.isRead) // Should be toggled to true
+        assert(book.isRead)
         verify(bookDao).updateBook(book)
     }
 
     @Test
-    fun `toggleRead from true to false works correctly`() = runTest {
+    fun toggleRead_from_true_to_false_works_correctly() = runTest {
 
         val book = testBook.copy(isRead = true)
 
         repository.toggleRead(book)
 
-        assert(!book.isRead) // Should be toggled to false
+        assert(!book.isRead)
         verify(bookDao).updateBook(book)
     }
 }

@@ -50,73 +50,71 @@ class BookViewModelTest {
         Dispatchers.resetMain()
     }
 
-
     @Test
-    fun `addBook calls repository addBook`() = runTest {
-        // When
-        viewModel.addBook(testBook)
-        advanceUntilIdle() // Wait for coroutine to complete
+    fun addBook_calls_repository_addBook() = runTest {
 
-        // Then
+        viewModel.addBook(testBook)
+        advanceUntilIdle()
+
         verify(repository).addBook(testBook)
     }
 
     @Test
-    fun `deleteBook calls repository deleteBook`() = runTest {
-        // When
-        viewModel.deleteBook(testBook)
-        advanceUntilIdle() // Wait for coroutine to complete
+    fun deleteBook_calls_repository_deleteBook() = runTest {
 
-        // Then
+        viewModel.deleteBook(testBook)
+        advanceUntilIdle()
+
+
         verify(repository).deleteBook(testBook)
     }
 
     @Test
-    fun `toggleRead calls repository toggleRead`() = runTest {
-        // When
-        viewModel.toggleRead(testBook)
-        advanceUntilIdle() // Wait for coroutine to complete
+    fun toggleRead_calls_repository_toggleRead() = runTest {
 
-        // Then
+        viewModel.toggleRead(testBook)
+        advanceUntilIdle()
+
+
         verify(repository).toggleRead(testBook)
     }
 
     @Test
-    fun `multiple addBook calls work correctly`() = runTest {
-        // Given
+    fun multiple_addBook_calls_work_correctly() = runTest {
+
         val book1 = testBook
         val book2 = testBook.copy(id = 2, name = "Another Book")
 
-        // When
+
         viewModel.addBook(book1)
         viewModel.addBook(book2)
         advanceUntilIdle()
 
-        // Then
+
         verify(repository).addBook(book1)
         verify(repository).addBook(book2)
     }
 
     @Test
-    fun `toggleRead multiple times works correctly`() = runTest {
-        // When
+    fun toggleRead_multiple_times_works_correctly() = runTest {
+
         viewModel.toggleRead(testBook)
         viewModel.toggleRead(testBook)
         advanceUntilIdle()
 
-        // Then
+
         verify(repository, times(2)).toggleRead(testBook)
     }
 
     @Test
-    fun `deleteBook after addBook works correctly`() = runTest {
-        // When
+    fun deleteBook_after_addBook_works_correctly() = runTest {
+
         viewModel.addBook(testBook)
         advanceUntilIdle()
         viewModel.deleteBook(testBook)
         advanceUntilIdle()
 
-        // Then
+
         verify(repository).addBook(testBook)
         verify(repository).deleteBook(testBook)
     }
